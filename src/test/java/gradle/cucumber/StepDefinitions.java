@@ -11,19 +11,12 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 
 public class StepDefinitions {
     
 	WebDriver driver;
-
-	@Before
-    public void openBrowser()
-    {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        //driver.get("https://www.wikipedia.org");
-    }
 
     @After
     public void closeBrowser()
@@ -31,12 +24,33 @@ public class StepDefinitions {
         driver.quit();
     }
 
-    // You can implement missing steps with the snippets below:
+    //exercice feature avec cas de test definis dans le fichier wikiFrance.java
+    //où je fais des conditions suivantes
+    @Given("I open {string}")
+    public void i_open(String string) {
+        if( string == "chrome")
+        {
+            driver = new ChromeDriver();
+            driver.manage().window().maximize();
+        }
+        else if (string == "firefox")
+        {
+            driver = new FirefoxDriver();
+            driver.manage().window().maximize();
+        }
+        else
+        {
+            driver = new ChromeDriver();
+            driver.manage().window().maximize();
+        }
+    }
 
     @Given("I open wikipedia")
     public void i_open_wikipedia() {
         driver.get("https://en.wikipedia.org/wiki/Main_Page");
     }
+
+    // You can implement missing steps with the snippets below:
 
     @When("I search {string}")
     public void i_search(String string) {
@@ -45,9 +59,8 @@ public class StepDefinitions {
         barreRecherche.sendKeys(Keys.ENTER);
     }
 
-    @Then("I should see {string} in the title")
-    public void i_should_see_in_the_title(String string) {
-
+    @Then("I should see {string}")
+    public void i_should_see(String string) {
 	    //j'appel la methode WebElement, acces à driver puis findElement
 	    WebElement title = driver.findElement(By.id("firstHeading"));
 
@@ -57,6 +70,5 @@ public class StepDefinitions {
 	    //compare les resultat(result) et la variable(string) definie
         Assert.assertEquals(result, string);
     }
-
 
 }
